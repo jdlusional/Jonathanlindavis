@@ -7,14 +7,14 @@
 <meta name="description" content="MICRO Group, LLC: strategic, research-driven consultancy serving nonprofit, education, and government institutions across Texas.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;1,500&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;1,500&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=Parisienne&family=Playfair+Display:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header class="site-header">
   <nav class="nav" aria-label="Primary">
-    <a class="nav-name" href="consulting.html">MICRO Group</a>
+    <a class="nav-name" href="consulting.html">Jonathan Lin Davis</a>
     <button class="nav-toggle" aria-label="Menu">&#9776;</button>
     <div class="nav-right">
       <ul class="nav-links">
@@ -26,6 +26,8 @@
       </ul>
       <div class="nav-social">
         <a href="https://www.linkedin.com/in/jonathanlindavis/" target="_blank" rel="noopener" aria-label="LinkedIn"><img src="Assets/linkedin.png" alt="LinkedIn"></a>
+        <a href="https://jonathanlindavis.substack.com/" target="_blank" rel="noopener" aria-label="Substack"><img src="Assets/substack.png" alt="Substack"></a>
+        <a href="mailto:jonathanlindavis@gmail.com" aria-label="Email"><img src="Assets/email.png" alt="Email"></a>
       </div>
     </div>
   </nav>
@@ -33,60 +35,35 @@
 
 <main>
 
-  <!-- PANEL 1: hero -->
+  <!-- PANEL 1: hero + dropdowns -->
   <section class="panel navy chess">
-    <div class="wrap inner consult-hero">
-      <img class="logo" src="Assets/micro-logo.png" alt="MICRO Group, LLC logo">
-      <span class="eyebrow">Strategic &amp; research-driven consulting</span>
-      <h1>A measured approach to <span class="em">your goals.</span></h1>
-      <p class="lede">A multi-service consultancy dedicated to serving nonprofit, education, and government institutions through expertise in Management, Integration, Culture, Research, and Operations.</p>
-    </div>
-    <button class="chevron" aria-label="Scroll to details">EXPLORE
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-    </button>
-  </section>
-
-  <!-- PANEL 2: split view + clients -->
-  <section class="panel warm tall">
     <div class="wrap inner">
+      <div class="consult-hero">
+        <img class="logo" src="Assets/micro-logo.png" alt="MICRO Group, LLC logo">
+        <span class="eyebrow">Strategic &amp; research-driven consulting</span>
+        <h1>A measured approach to <span class="em">your goals.</span></h1>
+        <p class="lede">A multi-service consultancy dedicated to serving nonprofit, education, and government institutions through expertise in Management, Integration, Culture, Research, and Operations.</p>
+      </div>
       <div class="split">
-        <div>
-          <span class="sublabel">What guides us</span>
-          <div class="principles">
-            <div class="principle"><h4>Mission</h4><p>To provide strategic, research-driven consultative solutions.</p></div>
-            <div class="principle"><h4>Vision</h4><p>To become a trusted partner in guiding institutions toward excellence and sustainability.</p></div>
-            <div class="principle"><h4>Values</h4><p>A client-centric institution committed to integrity, innovation, and collaboration.</p></div>
-            <div class="principle"><h4>Approach</h4><p>We tailor our work to the unique needs and goals of your organization.</p></div>
+        <details class="dropblock">
+          <summary>What Guides Us <span class="sign">+</span></summary>
+          <div class="drop-inner">
+            <div class="gitem"><h5>Mission</h5><p>To provide strategic, research-driven consultative solutions.</p></div>
+            <div class="gitem"><h5>Vision</h5><p>To become a trusted partner in guiding institutions toward excellence and sustainability.</p></div>
+            <div class="gitem"><h5>Values</h5><p>A client-centric institution committed to integrity, innovation, and collaboration.</p></div>
+            <div class="gitem"><h5>Approach</h5><p>We tailor our work to the unique needs and goals of your organization.</p></div>
           </div>
-        </div>
-        <div>
-          <span class="sublabel">Core subjects of expertise</span>
-          <div class="subjects">
-            <details open><summary><span class="ltr">M</span>Management<span class="sign">+</span></summary><div class="body">Strategic management and planning, executive leadership development, organizational strategy, and interim director services.</div></details>
-            <details><summary><span class="ltr">I</span>Integration<span class="sign">+</span></summary><div class="body">Programmatic and organizational integration, software implementation, and organization-wide training.</div></details>
-            <details><summary><span class="ltr">C</span>Culture<span class="sign">+</span></summary><div class="body">Culture development, team building, and employee engagement that strengthen collaboration and cohesion.</div></details>
-            <details><summary><span class="ltr">R</span>Research<span class="sign">+</span></summary><div class="body">Employee pay analysis, market analyses, and policy impact studies for evidence-based decisions.</div></details>
-            <details><summary><span class="ltr">O</span>Operations<span class="sign">+</span></summary><div class="body">Operational management that increases productivity, optimizes resources, and enhances effectiveness.</div></details>
+        </details>
+        <details class="dropblock">
+          <summary>Core Subjects &amp; Expertise <span class="sign">+</span></summary>
+          <div class="drop-inner">
+            <div class="sitem"><h5><span class="ltr">M</span>Management</h5><p>Strategic management and planning, executive leadership development, organizational strategy, and interim director services.</p></div>
+            <div class="sitem"><h5><span class="ltr">I</span>Integration</h5><p>Programmatic and organizational integration, software implementation, and organization-wide training.</p></div>
+            <div class="sitem"><h5><span class="ltr">C</span>Culture</h5><p>Culture development, team building, and employee engagement that strengthen collaboration and cohesion.</p></div>
+            <div class="sitem"><h5><span class="ltr">R</span>Research</h5><p>Employee pay analysis, market analyses, and policy impact studies for evidence-based decisions.</p></div>
+            <div class="sitem"><h5><span class="ltr">O</span>Operations</h5><p>Operational management that increases productivity, optimizes resources, and enhances effectiveness.</p></div>
           </div>
-        </div>
-      </div>
-
-      <div class="shead" style="margin-top:44px;margin-bottom:18px">
-        <span class="eyebrow">Track record</span>
-        <h2 style="font-size:1.7rem">Consultative clients</h2>
-      </div>
-      <div class="clients on-paper">
-        <div class="client"><span>The City of Austin</span></div>
-        <div class="client"><span>The State of Texas</span></div>
-        <div class="client"><span>The City of Fort Worth</span></div>
-        <div class="client"><span>Comcast / Xfinity</span></div>
-        <div class="client"><span>Human Rights Initiative of North Texas</span></div>
-        <div class="client"><span>re:3D</span></div>
-        <div class="client"><span>Tarrant County</span></div>
-        <div class="client"><span>Everman Independent School District</span></div>
-        <div class="client"><span>Texas State Affordable Housing Corporation</span></div>
-        <div class="client"><span>Tarrant County Mediation Center</span></div>
-        <div class="client"><span>Other confidential clients</span></div>
+        </details>
       </div>
     </div>
     <button class="chevron" aria-label="Scroll to footer">
@@ -94,17 +71,16 @@
     </button>
   </section>
 
-  <!-- PANEL 3: footer -->
+  <!-- PANEL 2: footer -->
   <section class="footer-panel">
-    <div class="footer-social">
-      <a href="https://www.linkedin.com/in/jonathanlindavis/" target="_blank" rel="noopener"><span class="badge"><img src="Assets/linkedin.png" alt="LinkedIn"></span><span class="lbl">LinkedIn</span></a>
+    <div class="footer-name">Jonathan Lin Davis</div>
+    <div class="footer-slogan">A measured approach to your goals.</div>
+    <a class="footer-email" href="mailto:jonathanlindavis@gmail.com">jonathanlindavis@gmail.com</a>
+    <div class="footer-cols">
+      <div class="fcol"><h4>Mailing Address</h4><p>1801 E 51st St., STE 365<br>PMB 354, Austin, Texas</p></div>
     </div>
-    <div class="footer-main">
-      <div><div class="fmark">MICRO Group, LLC</div><div class="ftag">A measured approach to your goals.</div></div>
-      <div><h4>Location</h4><p>1801 E 51st St., STE 365<br>PMB 354, Austin, Texas</p></div>
-      <div><h4>Connect</h4><a href="mailto:jonathanlindavis@gmail.com">jonathanlindavis@gmail.com</a><a href="https://www.linkedin.com/in/jonathanlindavis/" target="_blank" rel="noopener">LinkedIn</a></div>
-    </div>
-    <div class="footer-legal"><span>© <span id="yr"></span> MICRO Group, LLC. All rights reserved.</span><span>Austin, Texas</span></div>
+    <div class="footer-credit">This website was created by and is managed by Jonathan Lin Davis.</div>
+    <div class="footer-legal">© <span id="yr"></span> MICRO Group, LLC. All rights reserved. Austin, Texas.</div>
   </section>
 
 </main>

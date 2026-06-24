@@ -1,11 +1,8 @@
-// enable mandatory snap on html (desktop only via CSS media query)
 document.documentElement.classList.add('snap');
 
 document.addEventListener('click',function(e){
-  // mobile nav toggle
   var t=e.target.closest('.nav-toggle');
   if(t){var r=document.querySelector('.nav-right');if(r)r.classList.toggle('open');return;}
-  // chevron -> next panel
   var c=e.target.closest('.chevron');
   if(c){
     var panels=Array.prototype.slice.call(document.querySelectorAll('.panel,.footer-panel'));
