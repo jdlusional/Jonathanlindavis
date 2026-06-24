@@ -17,10 +17,9 @@
   --maxw:1180px;
   --bar-h:72px;
 
-  /* uniform type scale */
-  --t-body:1.06rem;        /* base body / bio size */
+  --t-body:1.06rem;
   --t-small:.95rem;
-  --t-label:.76rem;        /* section labels (emphasized) */
+  --t-label:.76rem;
   --t-lead:1.18rem;
   --t-h2:clamp(2rem,4vw,2.7rem);
   --t-h3:1.32rem;
@@ -37,14 +36,12 @@ h1,h2,h3,h4,.display{font-family:"Spectral",Georgia,serif;font-weight:600;line-h
 a{color:inherit}
 .wrap{max-width:var(--maxw);margin:0 auto;padding:0 40px;width:100%}
 
-/* emphasized section labels */
 .eyebrow{
   font-family:"Spectral",Georgia,serif;text-transform:uppercase;letter-spacing:.2em;
   font-size:var(--t-label);font-weight:600;color:var(--gold);display:block;
 }
 .coord{font-family:"Spectral",Georgia,serif;font-size:.72rem;letter-spacing:.16em;font-weight:600;color:var(--gold);display:inline-block}
 
-/* ---------- nav ---------- */
 .site-header{background:var(--gold);border-bottom:3px solid var(--navy);position:sticky;top:0;z-index:50}
 .nav{max-width:1320px;margin:0 auto;min-height:var(--bar-h);padding:0 36px;display:flex;align-items:center;justify-content:space-between;gap:20px}
 .nav-name{font-family:"Spectral",Georgia,serif;font-size:1.45rem;font-weight:600;color:var(--navy);text-decoration:none;letter-spacing:-.01em;white-space:nowrap}
@@ -58,7 +55,6 @@ a{color:inherit}
 .nav-social img{width:22px;height:22px;display:block;border-radius:4px}
 .nav-toggle{display:none;background:none;border:0;cursor:pointer;font-size:1.5rem;color:var(--navy);line-height:1}
 
-/* ---------- snap scaffolding ---------- */
 html.snap{scroll-snap-type:y mandatory}
 .panel{
   scroll-snap-align:start;scroll-snap-stop:always;
@@ -72,7 +68,6 @@ html.snap{scroll-snap-type:y mandatory}
 .panel.paper{background:var(--paper)}
 .panel .inner{position:relative;width:100%}
 
-/* chess wash */
 .chess::before{
   content:"";position:absolute;inset:0;pointer-events:none;
   background-image:
@@ -83,20 +78,17 @@ html.snap{scroll-snap-type:y mandatory}
   mask-image:radial-gradient(ellipse 70% 60% at 50% 42%,#000,transparent 74%);
 }
 
-/* chevron */
 .chevron{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:5px;background:none;border:0;cursor:pointer;color:var(--gold);font-family:"Spectral",serif;font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;animation:bob 2s ease-in-out infinite;z-index:5}
 .chevron svg{width:24px;height:24px}
 @keyframes bob{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,5px)}}
 @media(prefers-reduced-motion:reduce){.chevron{animation:none}}
 
-/* ---------- buttons ---------- */
 .btn{display:inline-block;font-family:"Spectral",Georgia,serif;font-size:.96rem;letter-spacing:.02em;text-decoration:none;padding:14px 36px;border-radius:999px;transition:all .18s ease}
 .btn-gold{background:transparent;color:var(--gold);border:1.5px solid var(--gold)}
 .btn-gold:hover{background:var(--gold);color:var(--navy);transform:translateY(-1px)}
 .btn-navy{background:var(--navy);color:var(--gold);border:1.5px solid var(--navy)}
 .btn-navy:hover{background:transparent;color:var(--navy)}
 
-/* ---------- section header ---------- */
 .shead{margin-bottom:30px}
 .shead .eyebrow{margin-bottom:10px}
 .shead h2{font-size:var(--t-h2);margin-bottom:10px}
@@ -104,10 +96,8 @@ html.snap{scroll-snap-type:y mandatory}
 .panel.navy .shead h2{color:var(--paper)}
 .panel.navy .shead .intro{color:var(--muted-light)}
 
-/* sub-label, emphasized over body */
 .sublabel{font-family:"Spectral",serif;text-transform:uppercase;letter-spacing:.16em;font-size:var(--t-label);color:var(--gold);font-weight:600;margin-bottom:12px;display:block}
 
-/* ---------- HOME hero ---------- */
 .home-hero{text-align:center}
 .home-hero .kicker{font-family:"Spectral",serif;font-size:1.5rem;font-weight:600;color:var(--gold);letter-spacing:.02em;margin-bottom:18px;display:block}
 .home-hero h1{color:var(--paper);font-size:clamp(2.7rem,6.2vw,4.6rem);line-height:1.04;max-width:16ch;margin:0 auto}
@@ -116,7 +106,6 @@ html.snap{scroll-snap-type:y mandatory}
 .roles{margin:34px auto 0;display:flex;flex-wrap:wrap;gap:12px;justify-content:center;max-width:60ch}
 .roles span{font-family:"Spectral",serif;font-size:.92rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--navy);background:var(--gold);border-radius:999px;padding:9px 22px;box-shadow:0 4px 14px rgba(241,196,0,.18)}
 
-/* ---------- HOME directory (navy panel) ---------- */
 .dir-head{display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:40px}
 .dir-head .about-primary{font-family:"Spectral",serif;font-size:1.5rem;font-weight:600;color:var(--gold);text-decoration:none;border-bottom:2px solid var(--gold);padding-bottom:3px;margin-bottom:22px;transition:opacity .15s ease}
 .dir-head .about-primary:hover{opacity:.8}
@@ -131,11 +120,9 @@ html.snap{scroll-snap-type:y mandatory}
 .dir-card p{color:var(--muted-light);font-size:var(--t-small);margin-bottom:12px}
 .dir-card .who{font-family:"Spectral",serif;font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;color:var(--gold-soft)}
 
-/* domains as compact accordion inside same panel */
 .domains{max-width:880px;margin:0 auto}
 .domains .dom-label{text-align:center;margin-bottom:18px}
 
-/* ---------- accordion ---------- */
 .acc{border-top:1px solid var(--line)}
 .acc.on-navy{border-top:1px solid var(--line-navy)}
 .acc details{border-bottom:1px solid var(--line)}
@@ -151,7 +138,6 @@ html.snap{scroll-snap-type:y mandatory}
 .acc .body{padding:0 4px 20px 44px;color:var(--muted);max-width:72ch;font-size:var(--t-small)}
 .acc.on-navy .body{color:var(--muted-light)}
 
-/* ---------- ABOUT ---------- */
 .founder .eyebrow{text-align:center}
 .founder h1{color:var(--paper);text-align:center;font-size:clamp(2.3rem,4.6vw,3.4rem);margin:12px 0 40px}
 .founder .cols{display:grid;grid-template-columns:280px 1fr;gap:50px;align-items:start}
@@ -169,19 +155,16 @@ html.snap{scroll-snap-type:y mandatory}
 .edu-item .focus{color:var(--muted-light);font-size:.9rem;font-style:italic}
 .edu-item .inst,.fel-item .inst{color:#8893b5;font-size:.82rem}
 
-/* skills small labeled columns */
 .skills{display:grid;grid-template-columns:repeat(2,1fr);gap:20px 40px;margin-top:6px}
 .skill-col h5{font-family:"Spectral",serif;text-transform:uppercase;letter-spacing:.1em;font-size:.72rem;color:var(--gold);margin-bottom:7px;font-weight:600}
 .skill-col p{color:var(--muted-light);font-size:.86rem;line-height:1.5}
 
-/* board service compact */
 .board{list-style:none;margin-top:6px}
 .board li{color:var(--muted-light);font-size:.9rem;margin-bottom:7px;padding-left:14px;position:relative}
 .board li::before{content:"";position:absolute;left:0;top:.6em;width:5px;height:5px;background:var(--gold);border-radius:50%}
 .board li b{color:#eef1fb;font-weight:600}
 .board li span{color:#8893b5}
 
-/* ---------- client cards ---------- */
 .clients{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:8px}
 .client{border:1px solid var(--line-navy);border-left:3px solid var(--gold);background:var(--navy-card);padding:18px 20px;display:flex;align-items:center;min-height:64px;transition:background .15s ease,transform .15s ease}
 .client:hover{background:#102a5c;transform:translateY(-2px)}
@@ -189,7 +172,6 @@ html.snap{scroll-snap-type:y mandatory}
 .clients.on-paper .client{background:var(--paper);border-color:var(--line);border-left:3px solid var(--gold)}
 .clients.on-paper .client span{color:var(--navy)}
 
-/* ---------- papers ---------- */
 .papers{margin-top:8px;border-top:1px solid var(--line-navy)}
 .papers.on-paper{border-top:1px solid var(--line)}
 .paper-item{padding:16px 0;border-bottom:1px solid var(--line-navy);display:grid;grid-template-columns:auto 1fr;gap:18px}
@@ -201,7 +183,6 @@ html.snap{scroll-snap-type:y mandatory}
 .papers.on-paper .paper-item .cite .ttl{color:var(--navy)}
 .paper-item .cite .src{color:#8893b5;font-size:.84rem;display:block;margin-top:2px}
 
-/* ---------- CONSULTING ---------- */
 .consult-hero{text-align:center}
 .consult-hero .logo{width:clamp(260px,30vw,360px);height:auto;margin:0 auto 18px;display:block;filter:drop-shadow(0 8px 28px rgba(0,0,0,.35))}
 .consult-hero .eyebrow{margin-bottom:12px;font-size:.84rem}
@@ -209,7 +190,6 @@ html.snap{scroll-snap-type:y mandatory}
 .consult-hero h1 .em{color:var(--gold);font-style:italic}
 .consult-hero .lede{max-width:62ch;margin:22px auto 0;color:var(--muted-light);font-size:var(--t-lead)}
 
-/* split view: guiding principles */
 .split{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
 .split .col-label{margin-bottom:16px}
 .principles{display:flex;flex-direction:column;gap:0;border-top:1px solid var(--line)}
@@ -217,7 +197,6 @@ html.snap{scroll-snap-type:y mandatory}
 .principle h4{font-size:1.1rem;color:var(--navy);margin-bottom:4px}
 .principle p{color:var(--muted);font-size:.92rem}
 
-/* MICRO subjects as selectable list */
 .subjects{border-top:1px solid var(--line)}
 .subjects details{border-bottom:1px solid var(--line)}
 .subjects summary{list-style:none;cursor:pointer;padding:15px 2px;display:flex;align-items:center;gap:14px;font-family:"Spectral",serif;font-size:1.12rem;font-weight:600;color:var(--navy)}
@@ -227,7 +206,6 @@ html.snap{scroll-snap-type:y mandatory}
 .subjects details[open] .sign{transform:rotate(45deg)}
 .subjects .body{padding:0 2px 16px 30px;color:var(--muted);font-size:.9rem}
 
-/* ---------- WRITING ---------- */
 .writing-intro{text-align:center;max-width:60ch;margin:0 auto 8px}
 .writing-intro .tagline{font-style:italic;color:var(--muted);font-size:var(--t-lead);margin-top:6px}
 .pub-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:14px}
@@ -237,7 +215,6 @@ html.snap{scroll-snap-type:y mandatory}
 .pub-card p{color:var(--muted);font-size:.92rem;line-height:1.55;flex:1}
 .writing-cta{text-align:center;margin-top:30px}
 
-/* ---------- RESEARCH ---------- */
 .research-lead{font-size:var(--t-body);color:var(--muted-light);max-width:70ch}
 .panel.navy .research-lead{color:var(--muted-light)}
 .research-cols{display:grid;grid-template-columns:1fr 1fr;gap:44px;margin-top:30px}
@@ -246,7 +223,6 @@ html.snap{scroll-snap-type:y mandatory}
 .research-cols p strong{color:var(--gold-soft);font-weight:600}
 .research-cols a{color:var(--gold-soft);text-decoration:underline;text-underline-offset:2px}
 
-/* ---------- footer panel (full snap page) ---------- */
 .footer-panel{background:var(--navy-deep);color:#aab3cc;scroll-snap-align:start;scroll-snap-stop:always;min-height:calc(100vh - var(--bar-h));display:flex;flex-direction:column;justify-content:center;padding:64px 0;border-top:3px solid var(--gold);position:relative}
 .footer-social{display:flex;gap:56px;justify-content:center;margin-bottom:64px}
 .footer-social a{display:flex;flex-direction:column;align-items:center;gap:14px;text-decoration:none;transition:transform .16s ease}
@@ -263,7 +239,6 @@ html.snap{scroll-snap-type:y mandatory}
 .footer-main p{font-size:.96rem;line-height:1.7;color:#c9d1e8}
 .footer-legal{max-width:var(--maxw);margin:48px auto 0;width:100%;padding-top:24px;border-top:1px solid rgba(255,255,255,.08);font-size:.84rem;color:#7e87a3;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
 
-/* ---------- responsive ---------- */
 @media(max-width:900px){
   html.snap{scroll-snap-type:none}
   body{font-size:1rem}
