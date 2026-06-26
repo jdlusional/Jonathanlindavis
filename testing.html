@@ -10,6 +10,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,400;0,600;1,400&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Barlow+Semi+Condensed:wght@500;600&family=Marcellus&family=Cinzel:wght@500;600&family=Parisienne&family=Michroma&family=Libre+Franklin:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="Assets/micro-mark.svg">
 <link rel="stylesheet" href="style.css">
+<style>
+/* Testing-page tab interface (scoped, page-only) */
+.test-tabs{max-width:1080px;margin:0 auto;text-align:left}
+.test-tablist{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:26px;border-bottom:1px solid var(--line-navy);padding-bottom:0}
+.test-tab{font-family:var(--f-eyebrow);font-size:.96rem;letter-spacing:.04em;color:var(--muted-light);background:var(--navy-card);border:1px solid var(--line-navy);border-bottom:0;border-radius:8px 8px 0 0;padding:13px 26px;cursor:pointer;transition:color .16s ease,background .16s ease;position:relative;top:1px}
+.test-tab:hover{color:var(--gold-soft)}
+.test-tab[aria-selected="true"]{color:var(--navy);background:var(--gold);border-color:var(--gold);font-weight:600}
+.test-panel{display:none;animation:fade .35s ease}
+.test-panel.active{display:block}
+.test-frame{width:100%;height:1400px;border:1px solid var(--line-navy);border-radius:10px;background:var(--paper);display:block;box-shadow:0 18px 40px rgba(0,0,0,.32)}
+.test-empty{color:#8893b5;font-style:italic;text-align:center;padding:80px 0;border:1px dashed var(--line-navy);border-radius:10px}
+</style>
 </head>
 <body>
 
@@ -38,14 +50,32 @@
 
   <!-- PANEL 1: testing canvas -->
   <section class="panel navy chess">
-    <div class="wrap inner" style="text-align:center">
-      <span class="eyebrow">Internal</span>
-      <h2 style="color:var(--paper);font-size:var(--t-h2);margin-bottom:14px">Testing</h2>
-      <p style="color:var(--muted-light);max-width:60ch;margin:0 auto">This page is for testing artifacts and layouts. It is not linked anywhere on the site and is excluded from search engines. Paste experimental markup below this line.</p>
+    <div class="wrap inner">
+      <div style="text-align:center">
+        <span class="eyebrow">Internal</span>
+        <h2 style="color:var(--paper);font-size:var(--t-h2);margin-bottom:14px">Testing</h2>
+        <p style="color:var(--muted-light);max-width:60ch;margin:0 auto 36px">This page is for testing artifacts and layouts. It is not linked anywhere on the site and is excluded from search engines.</p>
+      </div>
 
-      <!-- TEST AREA: drop artifacts below -->
-      <div style="margin-top:40px;border-top:1px solid var(--line-navy);padding-top:40px">
-        <!-- test content here -->
+      <!-- TEST AREA: tabbed -->
+      <div class="test-tabs">
+        <div class="test-tablist" role="tablist" aria-label="Test setups">
+          <button class="test-tab" role="tab" id="tab-1" aria-controls="panel-1" aria-selected="true">Test Setup 1</button>
+          <button class="test-tab" role="tab" id="tab-2" aria-controls="panel-2" aria-selected="false">Test Setup 2</button>
+          <button class="test-tab" role="tab" id="tab-3" aria-controls="panel-3" aria-selected="false">Test Setup 3</button>
+        </div>
+
+        <div class="test-panel active" role="tabpanel" id="panel-1" aria-labelledby="tab-1">
+          <iframe class="test-frame" src="ten_issues_90th_legislature.html" title="Test Setup 1" loading="lazy"></iframe>
+        </div>
+
+        <div class="test-panel" role="tabpanel" id="panel-2" aria-labelledby="tab-2" hidden>
+          <div class="test-empty">Empty. Paste experimental markup for Test Setup 2 here.</div>
+        </div>
+
+        <div class="test-panel" role="tabpanel" id="panel-3" aria-labelledby="tab-3" hidden>
+          <div class="test-empty">Empty. Paste experimental markup for Test Setup 3 here.</div>
+        </div>
       </div>
 
     </div>
@@ -69,5 +99,20 @@
 </main>
 
 <script src="site.js"></script>
+<script>
+(function(){
+  var tabs=document.querySelectorAll('.test-tab');
+  var panels=document.querySelectorAll('.test-panel');
+  function select(tab){
+    tabs.forEach(function(t){t.setAttribute('aria-selected', t===tab ? 'true':'false');});
+    panels.forEach(function(p){
+      var on = p.id === tab.getAttribute('aria-controls');
+      p.classList.toggle('active', on);
+      if(on){p.removeAttribute('hidden');}else{p.setAttribute('hidden','');}
+    });
+  }
+  tabs.forEach(function(t){t.addEventListener('click',function(){select(t);});});
+})();
+</script>
 </body>
 </html>
