@@ -6,11 +6,11 @@
 //
 // Examples:
 //   /api/admin/export?key=YOUR_SECRET&newsletter=house
-//       -> House Rules signups
+//       -> House Rules signups, plus everyone who chose "All"
 //   /api/admin/export?key=YOUR_SECRET&newsletter=f4f
-//       -> Fellowships4Free signups
+//       -> Fellowships4Free signups, plus everyone who chose "All"
 //   /api/admin/export?key=YOUR_SECRET
-//       -> everyone, with the newsletter column included
+//       -> everyone, with the newsletter column included (All rows shown as "All")
 
 export async function onRequestGet(context) {
   const { request, env } = context;
@@ -28,10 +28,12 @@ export async function onRequestGet(context) {
   let rows;
   try {
     if (newsletter) {
+      // A specific newsletter export includes that newsletter's own
+      // subscribers plus everyone who chose "All" (they want everything).
       rows = await env.DB.prepare(
         `SELECT newsletter, first_name, last_name, email, organization, referral, created_at
            FROM subscribers
-          WHERE newsletter = ?
+          WHERE newsletter = ? OR newsletter = 'All'
           ORDER BY created_at ASC`
       ).bind(newsletter).all();
     } else {
