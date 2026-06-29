@@ -83,6 +83,7 @@
   <div class="inner">
     <a class="mark" data-nav="#/">GI<span>F</span>T</a>
     <nav class="mast-nav">
+      <a data-nav="#/" data-navkey="home">Home</a>
       <a data-nav="#/recipients" data-navkey="recipients">Recipients</a>
       <a data-nav="#/funders" data-navkey="funders">Funders</a>
       <a data-nav="#/about" data-navkey="about">About</a>
@@ -129,6 +130,20 @@
   .lfoot .note{font-size:14px;color:var(--wash);max-width:520px;line-height:1.55;}
   .lfoot .meta{font-family:var(--mono);font-size:11px;color:var(--wash);letter-spacing:.05em;text-align:right;line-height:1.8;}
   .lfoot .meta a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--rule);cursor:pointer;}
+
+  /* funder showcase blocks */
+  .giverblock{margin-top:46px;}
+  .giver-toggle{margin-top:18px;width:100%;text-align:left;background:transparent;border:0;border-top:1px solid var(--rule-soft);padding:14px 0 0;cursor:pointer;font-family:var(--mono);font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink);}
+  .giver-toggle:hover{color:var(--money);}
+  .lentry .nm .posture{display:inline-block;font-family:var(--mono);font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--wash);border:1px solid var(--rule);padding:1px 6px;margin-left:8px;vertical-align:1px;}
+
+  /* call to action buttons, center middle */
+  .gift-cta{display:flex;gap:16px;justify-content:center;align-items:center;flex-wrap:wrap;padding:44px 0 8px;}
+  .gift-btn{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;padding:14px 26px;border:1.5px solid var(--ink);background:var(--ink);color:var(--paper);transition:background .14s,color .14s;}
+  .gift-btn:hover{background:#000;}
+  .gift-btn.ghost{background:transparent;color:var(--ink);}
+  .gift-btn.ghost:hover{background:var(--ink);color:var(--paper);}
+  @media (max-width:680px){ .gift-cta{flex-direction:column;} .gift-btn{width:100%;text-align:center;} }
 
   /* ===== DIRECTORY (recipients + funders shared) ===== */
   .vhead{padding:34px 0 0;}
@@ -287,6 +302,25 @@ const fmtShort = n => {
 const esc = s => String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const app = () => document.getElementById("app");
 
+// shared footer call-to-action buttons, on every view, link out to parent site
+function footerButtonsHTML(){
+  return `<div class="gift-cta">
+    <a class="gift-btn" href="https://jonathanlindavis.com/newsletters" target="_top">Sign up for a newsletter</a>
+    <a class="gift-btn ghost" href="https://jonathanlindavis.com/projects" target="_top">More projects by Jonathan Lin Davis</a>
+  </div>`;
+}
+function landingFootHTML(){
+  return `<footer><div class="wrap lfoot">
+    <div class="note">GIFT is an independent public good built by Jonathan Lin Davis from public IRS filings. It is free to use, takes no money, and endorses no one. Figures are reported as filed for tax year 2023 and run about a year behind.</div>
+    <div class="meta">
+      Data · <a data-nav="#/about">CC BY 4.0</a><br>
+      Code · <a data-nav="#/about">MIT</a><br>
+      Method · <a data-nav="#/about">read the methodology</a><br>
+      Exclusions · <a data-nav="#/about">audit file</a>
+    </div>
+  </div></footer>`;
+}
+
 // ---- data loaders ----
 async function loadSummaries(){
   if(App.funders && App.recipients) return;
@@ -345,7 +379,7 @@ async function route(){
     catch(e){ app().innerHTML = `<div class="wrap"><div class="empty">Could not load the index data. If you are viewing this locally, serve the folder over http rather than opening the file directly.</div></div>`; return; }
   }
 
-  if(top===""){ setNav(""); return renderLanding(); }
+  if(top===""){ setNav("home"); return renderLanding(); }
   if(top==="recipients"){ setNav("recipients"); return renderRecipients(); }
   if(top==="funders"){ setNav("funders"); return renderFunders(); }
   if(top==="about"){ setNav("about"); return renderAbout(); }
@@ -363,31 +397,51 @@ function topRecipientsByFunders(n){
   return [...App.recipients].sort((a,b)=>(b.funders-a.funders)||(b.total-a.total)).slice(0,n);
 }
 function renderLanding(){
-  const feat = topRecipientsByFunders(6);
+  const CAP = 10;
   app().innerHTML = `
   <main class="wrap">
     <section class="lhero">
       <div class="eyebrow">Grants Index For Texas · Tax year 2023 · Public record</div>
       <h1>Texas foundation giving, <b>opened up</b>, so your next funder is a search away.</h1>
-      <p class="llede">A free index built entirely from public IRS filings. Start with an organization like yours and see exactly who has funded it, and for how much.</p>
+      <p class="llede">A free index built from public IRS filings, drawn together with data from ProPublica and the Data Lake for Nonprofits. It indexes the top 100 private foundations and top 100 public charities in Texas by grants paid, alongside 10,259 recipient organizations. Start with an organization like yours and see exactly who has funded it, and for how much.</p>
       <div class="lsearch-block">
         <div class="lsearch-label">Find who funds organizations like yours</div>
         <div class="search lsearch">
           <input id="lq" placeholder="Search a nonprofit, school, or cause" autocomplete="off">
-          <button id="lgo">SEARCH</button>
+          <div class="icon">↵</div>
         </div>
         <p class="lalt">Looking the other way? <a data-nav="#/funders">Browse the funders</a> and see where their money goes.</p>
       </div>
     </section>
 
-    <section class="lledger">
+    <div id="lsearchresults" class="lledger hidden">
       <div class="lledger-head">
-        <div class="lledger-title">Widely backed recipients</div>
-        <div class="lledger-note">funded by many · FY2023</div>
+        <div class="lledger-title" id="lhead">Matching recipients</div>
+        <div class="lledger-note" id="lnote"></div>
       </div>
       <div id="lrows"></div>
-      <div class="lmore"><a data-nav="#/recipients">See all ${App.recipients.length.toLocaleString()} recipients →</a></div>
-    </section>
+      <div class="lmore" id="lmore"></div>
+    </div>
+
+    <div id="lshowcase">
+      <section class="lledger giverblock">
+        <div class="lledger-head">
+          <div class="lledger-title">Top private foundations</div>
+          <div class="lledger-note">by grants paid · FY2023</div>
+        </div>
+        <div id="pfrows"></div>
+        <button class="giver-toggle" id="pftoggle"></button>
+      </section>
+
+      <section class="lledger giverblock">
+        <div class="lledger-head">
+          <div class="lledger-title">Top public charities</div>
+          <div class="lledger-note">by grants paid · FY2023</div>
+        </div>
+        <div id="pcrows"></div>
+        <button class="giver-toggle" id="pctoggle"></button>
+      </section>
+    </div>
 
     <section class="ldoors">
       <div class="ldoor" data-nav="#/recipients">
@@ -398,30 +452,69 @@ function renderLanding(){
       <div class="ldoor" data-nav="#/funders">
         <div class="k">Start with a funder</div>
         <div class="h">Browse the givers</div>
-        <div class="d">Open any of the top ${App.funders.length} Texas grantmakers and see the full list of organizations it funded.</div>
+        <div class="d">Open any of the top 200 Texas grantmakers and see the full list of organizations it funded.</div>
       </div>
     </section>
+
+    ${footerButtonsHTML()}
   </main>
-  <footer><div class="wrap lfoot">
-    <div class="note">GIFT is an independent public good built by Jonathan Lin Davis from public IRS filings. It is free to use, takes no money, and endorses no one. Figures are reported as filed for tax year 2023 and run about a year behind.</div>
-    <div class="meta">
-      Data · <a data-nav="#/about">CC BY 4.0</a><br>
-      Code · <a data-nav="#/about">MIT</a><br>
-      Method · <a data-nav="#/about">read the methodology</a><br>
-      Exclusions · <a data-nav="#/about">audit file</a>
-    </div>
-  </div></footer>`;
+  ${landingFootHTML()}`;
 
-  document.getElementById("lrows").innerHTML = feat.map((r,i)=>`
-    <div class="lentry" data-nav="#/recipient/${esc(r.id)}">
-      <div class="rk">${String(i+1).padStart(2,"0")}</div>
-      <div class="nm">${esc(r.name)}<span class="sub">${esc(r.state||"")} · ${r.funders} funders</span></div>
-      <div class="amt money">${fmt(r.total)}</div>
-    </div>`).join("");
+  // ---- funder block rendering with expand/collapse ----
+  const sideRows = side => App.funders.filter(f=>f.side===side).sort((a,b)=>a.rank-b.rank);
+  function giverRowHTML(f){
+    const post = (f.side==="private_foundation" && f.posture && f.posture!=="unstated")
+      ? `<span class="posture">${esc(f.posture)}</span>` : "";
+    return `<div class="lentry" data-nav="#/funder/${esc(f.id)}">
+      <div class="rk">${String(f.rank).padStart(2,"0")}</div>
+      <div class="nm">${esc(f.name)}<span class="sub">${esc(f.city||"")}</span>${post}</div>
+      <div class="amt money">${fmt(f.grants)}</div>
+    </div>`;
+  }
+  function wireBlock(side, rowsEl, toggleEl){
+    const all = sideRows(side);
+    let expanded = false;
+    function paint(){
+      const list = expanded ? all : all.slice(0,CAP);
+      rowsEl.innerHTML = list.map(giverRowHTML).join("");
+      bindNav(rowsEl);
+      toggleEl.textContent = expanded
+        ? "Collapse to top 10 ↑"
+        : `See the rest of the top ${all.length} ↓`;
+    }
+    toggleEl.onclick = ()=>{ expanded=!expanded; paint(); if(!expanded) rowsEl.scrollIntoView({behavior:"smooth",block:"nearest"}); };
+    paint();
+  }
+  wireBlock("private_foundation", document.getElementById("pfrows"), document.getElementById("pftoggle"));
+  wireBlock("public_charity", document.getElementById("pcrows"), document.getElementById("pctoggle"));
 
-  const doSearch = ()=>{ const v=document.getElementById("lq").value.trim(); location.hash = "#/recipients"; sessionStorage.setItem("gift_rq", v); };
-  document.getElementById("lgo").onclick = doSearch;
-  document.getElementById("lq").addEventListener("keydown",e=>{ if(e.key==="Enter") doSearch(); });
+  // ---- live recipient search ----
+  const qbox=document.getElementById("lq");
+  const showcase=document.getElementById("lshowcase"), results=document.getElementById("lsearchresults");
+  const lrows=document.getElementById("lrows"), lhead=document.getElementById("lhead"), lnote=document.getElementById("lnote"), lmore=document.getElementById("lmore");
+  function draw(){
+    const q=qbox.value.trim().toLowerCase();
+    if(!q){ results.classList.add("hidden"); showcase.classList.remove("hidden"); return; }
+    showcase.classList.add("hidden"); results.classList.remove("hidden");
+    let rows=App.recipients.filter(r=>r.name.toLowerCase().includes(q))
+      .sort((a,b)=>(b.funders-a.funders)||(b.total-a.total));
+    const shown=rows.slice(0,CAP);
+    lnote.textContent = rows.length>CAP ? `${rows.length.toLocaleString()} found · showing top ${CAP}` : `${rows.length.toLocaleString()} found`;
+    if(rows.length===0){
+      lrows.innerHTML=`<div class="empty" style="text-align:left">No recipients match that name. Try fewer letters, or a different spelling.</div>`;
+      lmore.innerHTML=""; return;
+    }
+    lrows.innerHTML=shown.map((r,i)=>`
+      <div class="lentry" data-nav="#/recipient/${esc(r.id)}">
+        <div class="rk">${String(i+1).padStart(2,"0")}</div>
+        <div class="nm">${esc(r.name)}<span class="sub">${esc(r.state||"")} · ${r.funders} funders</span></div>
+        <div class="amt money">${fmt(r.total)}</div>
+      </div>`).join("");
+    lmore.innerHTML = rows.length>CAP ? `<a data-nav="#/recipients">See all ${rows.length.toLocaleString()} matches in the full index →</a>` : "";
+    bindNav(lrows); bindNav(lmore);
+  }
+  qbox.addEventListener("input",draw);
+  qbox.addEventListener("keydown",e=>{ if(e.key==="Enter"){ location.hash="#/recipients"; sessionStorage.setItem("gift_rq", qbox.value.trim()); }});
   bindNav(app());
 }
 
@@ -453,6 +546,7 @@ function renderRecipients(){
     <div class="ftag" id="ftag">Widely backed recipients · start typing to search all ${App.recipients.length.toLocaleString()}</div>
     <div id="list"></div>
     <div class="dmore" id="more"></div>
+    ${footerButtonsHTML()}
   </main>`;
 
   const qbox=document.getElementById("q"), list=document.getElementById("list");
@@ -496,7 +590,7 @@ function renderRecipients(){
 // FUNDERS DIRECTORY
 //==================================================================
 function renderFunders(){
-  const CAP=12;
+  const CAP=10;
   let side = "private_foundation";
   const sideLabel = s => s==="private_foundation" ? "private foundations" : "public charities";
   const sideData = s => App.funders.filter(f=>f.side===s).sort((a,b)=>a.rank-b.rank);
@@ -523,6 +617,7 @@ function renderFunders(){
     </div>
     <div id="list"></div>
     <div class="dmore" id="more"></div>
+    ${footerButtonsHTML()}
   </main>`;
 
   const qbox=document.getElementById("q"), list=document.getElementById("list");
@@ -582,10 +677,9 @@ async function renderRecipientProfile(id){
   funders.forEach(f=>f.grants.sort((a,b)=>b.a-a.a));
   const grantCount = rows.length, funderCount = funders.length;
   const total = rec.total || funders.reduce((s,f)=>s+f.total,0);
-  const TOPN = 8;
-  const top = funders.slice(0,TOPN), tail = funders.slice(TOPN);
-  const tailMin = tail.length ? Math.min(...tail.map(f=>f.total)) : 0;
-  const tailMax = tail.length ? Math.max(...tail.map(f=>f.total)) : 0;
+  const TOPN = 10;
+  const top = funders.slice(0,TOPN);
+  const hiddenCount = Math.max(0, funderCount - TOPN);
 
   const funderRow = f => {
     const multi = f.grants.length>1;
@@ -616,14 +710,10 @@ async function renderRecipientProfile(id){
     <div class="pledger-head"><div class="pledger-title">Funders, by total given</div><div class="pledger-note">largest first</div></div>
     <div class="col-rule"></div>
     <div id="list">${top.map(funderRow).join("")}</div>
-    ${tail.length ? `<button class="showall" id="showall"><span>Show all ${funderCount} funders ↓</span><span class="meta">${tail.length} more, ${fmt(tailMin)} to ${fmt(tailMax)}</span></button><div id="tail" class="hidden">${tail.map(funderRow).join("")}</div>` : ""}
+    ${hiddenCount>0 ? `<div class="dmore">Showing the top 10 of ${funderCount} funders by amount.</div>` : ""}
   </main>
-  <footer><div class="wrap"><p class="pfoot">Showing grants reported by indexed funders for tax year 2023, grouped by funder. Click any funder to see everything it gave. <a data-nav="#/about">Read the methodology</a>.</p></div></footer>`;
+  <footer><div class="wrap"><p class="pfoot">Showing grants reported by indexed funders for tax year 2023, grouped by funder. Click any funder to see everything it gave. <a data-nav="#/about">Read the methodology</a>.</p>${footerButtonsHTML()}</div></footer>`;
 
-  if(tail.length){
-    const btn=document.getElementById("showall");
-    btn.onclick=()=>{ document.getElementById("tail").classList.remove("hidden"); btn.classList.add("hidden"); bindNav(document.getElementById("tail")); };
-  }
   bindNav(app());
 }
 
@@ -690,7 +780,7 @@ async function renderFunderProfile(id){
          <div id="list"></div>
          <div class="dmore" id="more"></div>`}
   </main>
-  <footer><div class="wrap"><p class="pfoot">Showing grants of $10,000 or more reported by this funder for tax year 2023. Click any recipient to see every funder that supported it. <a data-nav="#/about">Read the methodology</a>.</p></div></footer>`;
+  <footer><div class="wrap"><p class="pfoot">Showing grants of $10,000 or more reported by this funder for tax year 2023. Click any recipient to see every funder that supported it. <a data-nav="#/about">Read the methodology</a>.</p>${footerButtonsHTML()}</div></footer>`;
 
   if(!noDetail){
     const qbox=document.getElementById("q"), list=document.getElementById("list");
@@ -751,7 +841,7 @@ async function renderAbout(){
     <div class="crumb" style="padding-top:30px"><a data-nav="#/">GIFT</a> / About</div>
     <div class="ahead"><h1>About &amp; method</h1></div>
     <p class="asummary">
-      GIFT, Grants Index For Texas, is an independent public good that opens up Texas foundation giving so nonprofits can find the funders they can actually approach. It is built entirely from public IRS filings for tax year 2023, covering the top private foundations and top grantmaking public charities, and it shows for each funder where its money went, and for each recipient who funded it.
+      GIFT, Grants Index For Texas, is an independent public good that opens up Texas foundation giving so nonprofits can find the funders they can actually approach. It is built from public IRS filings for tax year 2023, drawn together with data from ProPublica and the Data Lake for Nonprofits. It indexes the top 100 private foundations and the top 100 public charities in Texas by grants paid, alongside 10,259 recipient organizations that received grants of $10,000 or more from those funders. The index shows, for each funder, where its money went, and for each recipient, who funded it.
       <span class="free">Made by Jonathan Lin Davis. Free to use, takes no money, endorses no one. Data under CC BY 4.0, code under MIT.</span>
     </p>
 
@@ -789,9 +879,9 @@ async function renderAbout(){
       <details>
         <summary><span class="s-title">Methodology</span><span class="s-meta">how the index is built <span class="chev">›</span></span></summary>
         <div class="s-body">
-          <p class="s-intro">GIFT is built from public IRS sources, the organization master file, the income extracts, and the electronically filed return data, ranked by grants paid and screened so only reachable grantmakers appear. The full plain language method is below, and the complete technical pipeline is available as a PDF.</p>
+          <p class="s-intro">GIFT is built from public IRS sources, the organization master file, the income extracts, and the electronically filed return data, drawn together with data from ProPublica and the Data Lake for Nonprofits, ranked by grants paid and screened so only reachable grantmakers appear. It presents the top 100 private foundations and top 100 public charities by grants paid, with 10,259 recipients. The full plain language method is below, and the complete technical pipeline is available as a PDF.</p>
           <div class="methprose">
-            <p>GIFT covers two kinds of funder, private foundations and grantmaking public charities, ranked separately because they file different returns and operate differently. An organization is included when it is a real, approachable grantmaker, meaning it is reachable, it chooses its own giving, it gives cash, and it has a public identity you can research and contact.</p>
+            <p>GIFT covers two kinds of funder, private foundations and grantmaking public charities, ranked separately because they file different returns and operate differently. It presents the top 100 of each side by grants paid. An organization is included when it is a real, approachable grantmaker, meaning it is reachable, it chooses its own giving, it gives cash, and it has a public identity you can research and contact.</p>
             <p>For each funder GIFT shows where the money went, and for each recipient it shows who gave. Everything comes from public records, reflects filings that run about a year behind, and is free to use.</p>
           </div>
           <a class="dl" href="GIFT_methodology.pdf" download>Download technical methodology <span class="ext">PDF</span></a>
@@ -800,7 +890,7 @@ async function renderAbout(){
       </details>
     </div>
   </main>
-  <footer><div class="wrap-narrow afoot"><div class="meta">
+  <footer><div class="wrap-narrow afoot">${footerButtonsHTML()}<div class="meta">
     Data · <a data-nav="#/about">CC BY 4.0</a> &nbsp;·&nbsp; Code · <a data-nav="#/about">MIT</a><br>
     Built by Jonathan Lin Davis as an independent public good · not affiliated with or endorsed by any funder or agency
   </div></div></footer>`;
@@ -810,6 +900,7 @@ async function renderAbout(){
 //==================================================================
 // BOOT
 //==================================================================
+bindNav(document.querySelector(".masthead")); // wire header nav once
 route();
 </script>
 </body>
