@@ -96,22 +96,28 @@
 <!-- view scripts appended below in subsequent build steps -->
 <style>
   /* ===== LANDING ===== */
-  .lhero{padding:60px 0 8px;}
-  .lhero h1{font-size:48px;max-width:840px;}
+  .lbrand{text-align:center;padding:60px 0 40px;border-bottom:1px solid var(--rule);}
+  .lbrand .logo{font-size:80px;font-weight:700;line-height:1;margin-bottom:24px;letter-spacing:-.02em;}
+  .lbrand .logo span{color:var(--money);}
+  .lbrand .subtitle{font-family:var(--mono);font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--wash);margin:20px 0;}
+  .lbrand .byline{font-size:22px;color:var(--money);font-style:italic;margin-top:16px;}
+  .lbrand .prefix{font-size:13px;color:var(--wash);font-style:normal;}
+  .lhero{padding:60px 0 8px;text-align:center;}
+  .lhero h1{font-size:48px;max-width:840px;margin:0 auto;}
   .lhero h1 b{font-weight:700;}
-  .llede{font-size:19px;color:var(--wash);max-width:600px;margin-top:22px;line-height:1.55;}
-  .lsearch-block{margin-top:38px;}
-  .lsearch-label{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);margin-bottom:10px;}
+  .llede{font-size:19px;color:var(--wash);max-width:600px;margin:22px auto 0;line-height:1.55;}
+  .lsearch-block{margin-top:38px;display:flex;flex-direction:column;align-items:center;}
+  .lsearch-label{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);margin-bottom:10px;text-align:center;}
   .fade-toggle{display:inline-block;min-height:1em;}
-  .fade-items{position:relative;height:1.6em;margin-top:14px;}
-  .fade-item{position:absolute;animation:fadeInOut 10s infinite;opacity:0;font-size:15px;color:var(--wash);line-height:1.55;}
+  .fade-items{position:relative;height:1.6em;margin-top:14px;text-align:center;}
+  .fade-item{position:absolute;animation:fadeInOut 15s infinite;opacity:0;font-size:15px;color:var(--wash);line-height:1.55;width:100%;}
   .fade-item:nth-child(1){animation-delay:0s;}
-  .fade-item:nth-child(2){animation-delay:2s;}
-  .fade-item:nth-child(3){animation-delay:4s;}
-  .fade-item:nth-child(4){animation-delay:6s;}
-  .fade-item:nth-child(5){animation-delay:8s;}
-  @keyframes fadeInOut{0%{opacity:0;}10%{opacity:1;}40%{opacity:1;}50%{opacity:0;}100%{opacity:0;}}
-  .lsearch{max-width:600px;position:relative;}
+  .fade-item:nth-child(2){animation-delay:3s;}
+  .fade-item:nth-child(3){animation-delay:6s;}
+  .fade-item:nth-child(4){animation-delay:9s;}
+  .fade-item:nth-child(5){animation-delay:12s;}
+  @keyframes fadeInOut{0%{opacity:0;}10%{opacity:1;}25%{opacity:1;}35%{opacity:0;}100%{opacity:0;}}
+  .lsearch{max-width:600px;position:relative;margin:0 auto;}
   .lsearch button{border:0;border-left:1.5px solid var(--ink);background:var(--ink);color:var(--paper);padding:0 28px;font-family:var(--mono);font-size:13px;letter-spacing:.08em;cursor:pointer;}
   .lsearch button:hover{background:#000;}
   .lsuggest{position:absolute;top:calc(100% + 3px);left:0;right:0;background:var(--well);border:1.5px solid var(--ink);z-index:100;max-height:380px;overflow-y:auto;}
@@ -120,19 +126,20 @@
   .lsuggest-item:last-child{border-bottom:0;}
   .lsuggest-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .lsuggest-tag{font-family:var(--mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--wash);white-space:nowrap;flex-shrink:0;}
-  .lalt{margin-top:14px;font-size:15px;color:var(--wash);}
+  .lalt{margin-top:14px;font-size:15px;color:var(--wash);text-align:center;}
   .lalt a{color:var(--ink);text-decoration:underline;text-underline-offset:3px;cursor:pointer;}
-  .lledger{margin-top:60px;}
-  .lledger-head{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid var(--ink);padding-bottom:8px;}
+  .lledger{margin-top:60px;display:flex;flex-direction:column;align-items:center;width:100%;max-width:700px;margin-left:auto;margin-right:auto;}
+  .lledger-head{display:flex;justify-content:center;align-items:center;border-bottom:2px solid var(--ink);padding-bottom:8px;gap:30px;flex-wrap:wrap;width:100%;}
   .lledger-title{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;}
-  .lledger-note{font-family:var(--mono);font-size:11px;color:var(--wash);letter-spacing:.04em;}
+  .lledger-note{font-family:var(--mono);font-size:11px;color:var(--wash);letter-spacing:.04em;text-align:center;}
+  #lrows{max-width:600px;margin:0 auto;}
   .lentry{display:grid;grid-template-columns:auto 1fr auto;gap:20px;padding:14px 0;border-bottom:1px solid var(--rule-soft);align-items:baseline;cursor:pointer;transition:background .12s,padding-left .12s;}
   .lentry:hover{background:#efe9da;padding-left:8px;}
   .lentry .rk{font-family:var(--mono);font-size:13px;color:var(--wash);min-width:26px;}
   .lentry .nm{font-size:18px;}
   .lentry .nm .sub{display:block;font-family:var(--mono);font-size:11px;color:var(--wash);letter-spacing:.03em;text-transform:uppercase;margin-top:3px;}
   .lentry .amt{font-size:17px;text-align:right;white-space:nowrap;}
-  .lmore{margin-top:24px;font-family:var(--mono);font-size:13px;}
+  .lmore{margin-top:24px;font-family:var(--mono);font-size:13px;text-align:center;}
   .lmore a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--ink);padding-bottom:2px;cursor:pointer;}
   .ldoors{display:grid;grid-template-columns:1fr 1fr;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);margin-top:60px;}
   .ldoor{padding:30px 28px;cursor:pointer;transition:background .12s;}
@@ -415,8 +422,13 @@ function topRecipientsByFunders(n){
 function renderLanding(){
   app().innerHTML = `
   <main class="wrap">
+    <section class="lbrand">
+      <div class="logo">GI<span>F</span>T</div>
+      <div class="subtitle">GRANT INDEX OF FUNDERS IN TEXAS</div>
+      <div class="prefix">A PROJECT BY</div>
+      <div class="byline">Jonathan Lin Davis</div>
+    </section>
     <section class="lhero">
-      <div class="eyebrow">Grants Index For Texas · Tax year 2023</div>
       <h1>Your next funder is a search away.</h1>
       <p class="llede">A free search index of private foundations and public charities
         <div class="fade-items">
