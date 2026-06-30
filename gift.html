@@ -283,12 +283,12 @@
   .rorg .rob{font-family:var(--mono);font-size:9px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink);background:var(--rule-soft);padding:2px 6px;border-radius:2px;white-space:nowrap;cursor:pointer;text-decoration:none;border-bottom:1px solid transparent;transition:all .12s;}
   .rorg .rob:hover{background:var(--ink);color:var(--paper);}
   .reason-legend{margin-bottom:24px;padding:14px 0;border:1px solid var(--rule);background:#faf8f4;}
-  .reason-codes{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:12px;}
-  .reason-code{font-size:13px;padding:8px 0;}
+  .reason-codes{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:12px;}
+  .reason-code{font-size:13px;padding:8px;border-radius:2px;transition:all .12s;}
   .reason-code-label{font-family:var(--mono);font-weight:700;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);background:var(--rule-soft);padding:2px 6px;border-radius:2px;display:inline-block;margin-right:8px;}
-  .reason-code-desc{font-size:13px;color:var(--wash);}
-  .reason-code.highlighted{background:var(--ink);color:var(--paper);padding:8px;border-radius:2px;}
-  .reason-code.highlighted .reason-code-label{background:transparent;color:var(--paper);}
+  .reason-code-desc{font-size:13px;color:var(--wash);margin-top:4px;line-height:1.4;}
+  .reason-code.highlighted{background:#ffd700;color:var(--ink);padding:8px;border-radius:2px;}
+  .reason-code.highlighted .reason-code-label{background:rgba(0,0,0,.1);}
   .caveat{padding:9px 0;border-bottom:1px solid var(--rule-soft);}
   .caveat .ct{font-weight:600;font-size:16px;}
   .caveat .cd{font-size:14px;color:var(--wash);line-height:1.5;margin-top:2px;}
@@ -943,45 +943,83 @@ async function renderAbout(){
     "No researchable public identity":"Cannot be verified or contacted"
   };
 
-  // Create reason codes: abbreviate detailed reasons
-  const createReasonCode = (reason) => {
-    if(!reason) return "—";
-    // Create 2-3 letter abbreviation from first letters
-    const words = reason.split(/\s+/);
-    if(words.length === 1) return reason.slice(0,3).toUpperCase();
-    return (words[0][0] + words[1][0] + (words[2]?words[2][0]:"")).toUpperCase();
+  // Create reason codes: group similar reasons
+  const normalizeReason = (reason) => {
+    if(!reason) return "";
+    return reason.toLowerCase().trim();
   };
 
-  let basisHtml, legendHtml, rosterHtml, totalExcluded, reasonMap = {};
+  const getReasonBase = (reason) => {
+    const norm = normalizeReason(reason);
+    // Extract base reason (first part before comma or specific modifiers)
+    if(norm.includes("closed")) return "closed";
+    if(norm.includes("operator") || norm.includes("conduit")) return "operator";
+    if(norm.includes("kind") || norm.includes("in-kind")) return "in-kind";
+    if(norm.includes("identity") || norm.includes("researchable")) return "identity";
+    return norm.split(/[,;]/)[0].trim();
+  };
+
+  let basisHtml, legendHtml, rosterHtml, totalExcluded, reasonMap = {}, codeMap = {};
   if(ex && ex.groups){
     totalExcluded = ex.groups.reduce((s,g)=>s+g.orgs.length,0);
 
-    // Build reason map and legend
+    // Build reason map with smart deduplication
+    const reasonCodes = {};
     ex.groups.forEach(g => {
       g.orgs.forEach(o => {
-        if(o.reason && !reasonMap[o.reason]){
-          reasonMap[o.reason] = createReasonCode(o.reason);
+        if(o.reason){
+          const base = getReasonBase(o.reason);
+          if(!reasonCodes[base]) reasonCodes[base] = [];
+          if(!reasonCodes[base].includes(o.reason)) reasonCodes[base].push(o.reason);
         }
       });
     });
 
-    const reasonEntries = Object.entries(reasonMap).sort((a,b)=>a[1].localeCompare(b[1]));
+    // Create codes for each base reason
+    const baseList = Object.keys(reasonCodes).sort();
+    const codeLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    baseList.forEach((base, i) => {
+      const code = codeLetters[i] || "?";
+      reasonCodes[base].forEach(fullReason => {
+        reasonMap[fullReason] = code;
+        if(!codeMap[code]) codeMap[code] = [];
+        if(!codeMap[code].includes(fullReason)) codeMap[code].push(fullReason);
+      });
+    });
+
+    const sortedCodes = Object.keys(codeMap).sort();
     legendHtml = `<div class="reason-legend">
       <div style="font-weight:600;margin-bottom:8px;">Exclusion reason codes:</div>
       <div class="reason-codes">
-        ${reasonEntries.map(([reason,code])=>`<div class="reason-code" id="reason-${esc(code)}"><span class="reason-code-label">${esc(code)}</span><span class="reason-code-desc">${esc(reason)}</span></div>`).join("")}
+        ${sortedCodes.map(code=>{
+          const reasons = codeMap[code];
+          const mainReason = reasons[0];
+          return `<div class="reason-code" id="reason-${esc(code)}"><span class="reason-code-label">${esc(code)}</span><span class="reason-code-desc">${esc(mainReason)}</span></div>`;
+        }).join("")}
       </div>
     </div>`;
 
     basisHtml = ex.groups.map(g=>`<div class="basis-row"><div class="bn">${g.orgs.length}</div><div class="bl">${esc(g.label)}</div><div class="bd">${esc(BASIS_DESC[g.label]||"")}</div></div>`).join("");
-    rosterHtml = ex.groups.map(g=>`
-      <div class="rgroup">
-        <div class="rgroup-h"><span>${esc(g.label)}</span><span class="cnt">${g.orgs.length}</span></div>
-        ${g.orgs.map(o=>{
-          const code = reasonMap[o.reason] || "—";
-          return `<div class="rorg"><div class="ron">${esc(o.name)}</div><a href="#" class="rob" data-reason-code="${esc(code)}" onclick="highlightReason('${esc(code)}'); return false;">${esc(code)}</a></div>`;
-        }).join("")}
-      </div>`).join("");
+
+    // Build flat roster with codes inline
+    const allOrgs = [];
+    ex.groups.forEach(g => {
+      g.orgs.forEach(o => {
+        allOrgs.push({name: o.name, reason: o.reason, codes: []});
+      });
+    });
+
+    // Assign codes to each org
+    allOrgs.forEach(o => {
+      if(o.reason){
+        const code = reasonMap[o.reason];
+        if(code && !o.codes.includes(code)) o.codes.push(code);
+      }
+    });
+
+    rosterHtml = `<div class="rgroup"><div class="rgroup-h" style="border-bottom:2px solid var(--ink);padding-bottom:8px;"><span>All excluded organizations</span><span class="cnt">${allOrgs.length}</span></div>
+      ${allOrgs.map(o=>`<div class="rorg"><div class="ron">${esc(o.name)}</div><div style="display:flex;gap:6px;">${o.codes.map(code=>`<a href="#" class="rob" data-reason-code="${esc(code)}" onclick="highlightReason('${esc(code)}'); return false;">${esc(code)}</a>`).join("")}</div></div>`).join("")}
+    </div>`;
   } else {
     totalExcluded = 40;
     basisHtml = `<div class="s-intro">Basis counts load from gift_exclusions.json, generated from excluded_funders.csv.</div>`;
@@ -1078,7 +1116,8 @@ function highlightReason(code){
   const legendEl = document.getElementById("reason-" + code);
   if(legendEl){
     legendEl.classList.add("highlighted");
-    legendEl.scrollIntoView({behavior:"smooth",block:"nearest"});
+    // Scroll to center
+    legendEl.scrollIntoView({behavior:"smooth",block:"center"});
   }
 }
 
