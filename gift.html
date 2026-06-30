@@ -278,7 +278,8 @@
   .rgroup{margin-bottom:24px;}
   .rgroup-h{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--wash);border-bottom:1px solid var(--ink);padding-bottom:6px;margin-bottom:8px;display:flex;justify-content:space-between;}
   .rgroup-h .cnt{color:var(--ink);font-weight:700;}
-  .rorg{display:grid;grid-template-columns:1fr auto;gap:16px;padding:6px 0;border-bottom:1px dotted var(--rule-soft);align-items:baseline;}
+  .rorg{display:grid;grid-template-columns:1fr auto auto;gap:12px;padding:6px 0;border-bottom:1px dotted var(--rule-soft);align-items:center;}
+  .rorg-arrow{font-size:13px;color:var(--wash);font-family:var(--mono);}
   .rorg .ron{font-size:15px;}
   .rorg .rob{font-family:var(--mono);font-size:9px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink);background:var(--rule-soft);padding:2px 6px;border-radius:2px;white-space:nowrap;cursor:pointer;text-decoration:none;border-bottom:1px solid transparent;transition:all .12s;}
   .rorg .rob:hover{background:var(--ink);color:var(--paper);}
@@ -1018,6 +1019,7 @@ async function renderAbout(){
       ${allOrgs.map(o=>`
         <div class="rorg">
           <div class="ron">${esc(o.name)}</div>
+          <div class="rorg-arrow">→</div>
           <div style="display:flex;gap:6px;flex-wrap:wrap;">
             ${o.codes.sort().map(code=>`<a href="#" class="rob" data-reason-code="${esc(code)}" onclick="highlightReason('${esc(code)}'); return false;">${esc(code)}</a>`).join("")}
           </div>
@@ -1052,7 +1054,7 @@ async function renderAbout(){
       <details>
         <summary><span class="s-title">Full exclusion roster</span><span class="s-meta">40 organizations <span class="chev">›</span></span></summary>
         <div class="s-body">
-          <p class="s-intro">Every excluded organization and each basis they are excluded. Click any code to highlight its description above. The complete file with EINs and detailed reasons is available to download.</p>
+          <p class="s-intro">Every excluded organization and each basis they are excluded. Select the letter code to the right of each organization to highlight its exclusion basis above. The complete file with EINs and detailed reasons is available to download.</p>
           ${rosterHtml}
           <a class="dl" href="excluded_funders.csv" download>Download full exclusion file <span class="ext">CSV</span></a>
         </div>
