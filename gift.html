@@ -983,20 +983,43 @@ async function renderAbout(){
       </div>
     </div>`;
 
-    // Build flat roster with all applicable codes for each org
-    const allOrgs = [];
+    // Build flat roster with all applicable codes and reasons for each org
+    const orgMap = {};
     ex.groups.forEach(g => {
+      const code = BASIS_CODES[g.label];
       g.orgs.forEach(o => {
-        if(!allOrgs.find(x=>x.name===o.name)){
-          allOrgs.push({name: o.name, codes: orgBases[o.name] || []});
+        if(!orgMap[o.name]){
+          orgMap[o.name] = {codes: [], reasons: []};
+        }
+        if(!orgMap[o.name].codes.includes(code)){
+          orgMap[o.name].codes.push(code);
+        }
+        if(o.reason && !orgMap[o.name].reasons.includes(o.reason)){
+          orgMap[o.name].reasons.push(o.reason);
         }
       });
     });
 
-    allOrgs.sort((a,b)=>a.name.localeCompare(b.name));
+    const allOrgs = Object.entries(orgMap).map(([name, data])=>({
+      name,
+      codes: data.codes,
+      reasons: data.reasons
+    })).sort((a,b)=>a.name.localeCompare(b.name));
 
     rosterHtml = `<div class="rgroup"><div class="rgroup-h" style="border-bottom:2px solid var(--ink);padding-bottom:8px;"><span>All excluded organizations</span><span class="cnt">${allOrgs.length}</span></div>
-      ${allOrgs.map(o=>`<div class="rorg"><div class="ron">${esc(o.name)}</div><div style="display:flex;gap:6px;flex-wrap:wrap;">${o.codes.sort().map(code=>`<a href="#" class="rob" data-reason-code="${esc(code)}" onclick="highlightReason('${esc(code)}'); return false;">${esc(code)}</a>`).join("")}</div></div>`).join("")}
+      ${allOrgs.map(o=>`
+        <div class="rorg">
+          <div style="flex:1;">
+            <div class="ron">${esc(o.name)}</div>
+            <div style="font-size:12px;color:var(--wash);margin-top:3px;line-height:1.4;">
+              ${o.reasons.map(r=>`<div style="margin:2px 0">${esc(r)}</div>`).join("")}
+            </div>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0;">
+            ${o.codes.sort().map(code=>`<a href="#" class="rob" data-reason-code="${esc(code)}" onclick="highlightReason('${esc(code)}'); return false;">${esc(code)}</a>`).join("")}
+          </div>
+        </div>
+      `).join("")}
     </div>`;
   } else {
     totalExcluded = 40;
@@ -1033,7 +1056,7 @@ async function renderAbout(){
       <details>
         <summary><span class="s-title">Full exclusion roster</span><span class="s-meta">${totalExcluded} organizations <span class="chev">›</span></span></summary>
         <div class="s-body">
-          <p class="s-intro">Every excluded organization, grouped by its primary basis. The complete file with EINs and full reasons is available to download.</p>
+          <p class="s-intro">Every excluded organization and each basis they are excluded. Click any code to highlight its description above. The complete file with EINs and detailed reasons is available to download.</p>
           ${rosterHtml}
           <a class="dl" href="excluded_funders.csv" download>Download full exclusion file <span class="ext">CSV</span></a>
         </div>
