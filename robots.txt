@@ -5,5 +5,7 @@ Disallow: /LLOpensecrets
 Disallow: /LLOpensecrets.html
 Disallow: /llopensecrets
 Disallow: /llopensecrets.html
+Disallow: /kct
+Disallow: /kct.html
 
 Sitemap: https://jonathanlindavis.com/sitemap.xml
