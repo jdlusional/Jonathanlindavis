@@ -233,7 +233,7 @@ footer a{color:var(--wash);text-decoration:underline;text-underline-offset:2px}
 
 <footer>
   <span>Fellowships4Free &middot; A Project by Jonathan Lin Davis &middot; CC-BY-4.0 data, MIT code</span>
-  <span><a href="https://fellowship4free.com/data/fellowships.json">fellowships.json</a> &middot; <a href="https://fellowship4free.com/data/fellowships.csv">fellowships.csv</a></span>
+  <span><a href="data/fellowships.json">fellowships.json</a> &middot; <a href="data/fellowships.csv">fellowships.csv</a></span>
   <a class="f4f-contact-btn" href="https://jonathanlindavis.com/contact.html">Contact Us</a>
 </footer>
 
@@ -285,7 +285,7 @@ function highlight(text,q){
 
 /* ---- Load ---- */
 async function load(){
-  const res=await fetch('https://fellowship4free.com/data/fellowships.json',{cache:'no-store'});
+  const res=await fetch('data/fellowships.json',{cache:'no-store'});
   state.data=await res.json();
   document.getElementById('m-count').textContent=state.data.length;
   document.getElementById('m-updated').textContent=new Date().toLocaleDateString(undefined,{year:'numeric',month:'short'});
