@@ -80,7 +80,7 @@ a{color:var(--ink);text-decoration:none}
   margin-bottom:0;
   padding:1.1rem 0;
   display:grid;
-  grid-template-columns:1fr 148px;
+  grid-template-columns:1fr 210px;
   gap:.3rem 1.4rem;
 }
 .entry .head{grid-column:1;display:flex;flex-direction:column;gap:.12rem}
@@ -122,7 +122,7 @@ mark{background:#bcd0eb;color:#1b3a6b;border-radius:0;padding:0 1px}
 }
 .sidebox .lab{font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--wash);display:block;margin-top:.6rem}
 .sidebox .lab:first-child{margin-top:0}
-.sidebox .funding-amount{font-family:var(--serif);font-size:1.18rem;font-weight:500;color:var(--ok);line-height:1.25}
+.sidebox .funding-amount{font-family:var(--serif);font-size:1rem;font-weight:500;color:var(--ok);line-height:1.32}
 .sidebox .opens-val{font-size:.92rem;color:var(--wash);line-height:1.3}
 .sidebox .deadline-val{font-family:var(--serif);font-size:1.22rem;color:var(--ink);line-height:1.2}
 .sidebox .deadline-val.rolling{color:var(--wash);font-style:italic;font-size:1.05rem}
@@ -399,11 +399,8 @@ function render(){
     const opensHtml=showOpens
       ?`<span class="lab">Opens</span><div class="opens-val">${esc(r.opens)}</div>`:'';
 
-    const amountShort=r.amount
-      ?(r.amount.length>55?r.amount.substring(0,52)+'...':r.amount)
-      :'';
-    const fundingHtml=amountShort
-      ?`<span class="lab">Funding</span><div class="funding-amount">${esc(amountShort)}</div>`:'';
+    const fundingHtml=r.amount
+      ?`<span class="lab">Funding</span><div class="funding-amount">${esc(r.amount)}</div>`:'';
 
     return `<article class="entry">
       <div class="head">
