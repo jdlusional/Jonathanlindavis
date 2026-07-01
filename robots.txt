@@ -3,5 +3,7 @@ Allow: /
 Disallow: /testing.html
 Disallow: /LLOpensecrets
 Disallow: /LLOpensecrets.html
+Disallow: /llopensecrets
+Disallow: /llopensecrets.html
 
 Sitemap: https://jonathanlindavis.com/sitemap.xml
